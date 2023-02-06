@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec babel-node index.js"
   },
-  "author": "aravind",
+  "author": "Bhaskar",
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",

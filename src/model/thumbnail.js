@@ -8,9 +8,9 @@ const ThumbnailSchema = new mongoose.Schema(
       required: true,
     },
     imageName: { type: String, required: true },
-    imageLink: { type: String, required: true },
-    img:  {data:Buffer,contentType: String},
-
+    // imageLink: { type: String, required: true },
+    image:  { type:Buffer, required: true },
+    contentType: { type: String, required: true },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",

@@ -29,7 +29,7 @@ const swaggerOptions = {
       description:
         "This document will contains the apis which amazon clone is serving",
       contact: {
-        name: "Aravind ",
+        name: "Bhaskar K",
       },
     },
     servers: [{ url: "http://localhost:5000" }],

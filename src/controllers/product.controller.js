@@ -24,18 +24,18 @@ export const addProductByCustomer = async (req, res, next) => {
     const item = await addItemByUser(req.body);
     await addProductByUser({ itemId: item?.id, ...req.body });
     // await addThumbnailByItem({ itemId: item?.id, ...req.body });/
-    console.log(typeof req.body?.thumbnails)
-    const itemThumbnail = req.body?.thumbnails.map((e) => {
-      return {
-        ...e,
-        itemId: item?.id,
-        createdBy: req.body.createdBy,
-      };
-    });
+    // console.log(typeof req.body?.thumbnails)
+    // const itemThumbnail = req.body?.thumbnails.map((e) => {
+    //   return {
+    //     ...e,
+    //     itemId: item?.id,
+    //     createdBy: req.body.createdBy,
+    //   };
+    // });
     
-    console.log(itemThumbnail)
-    const addedThumbnail = await addBulkThumbnailsByItemId(itemThumbnail);
-    addedThumbnail.map(async (e) => await updateThumbnail(e.itemId, e._id));
+    // console.log(itemThumbnail)
+    // const addedThumbnail = await addBulkThumbnailsByItemId(itemThumbnail);
+    // addedThumbnail.map(async (e) => await updateThumbnail(e.itemId, e._id));
 
     res.status(201).json({ message: "Product is added successfully" });
   } catch (error) {
@@ -105,11 +105,18 @@ export const getReviewsByProductId = async (req, res, next) => {
 
 export const addMultiImage = async (req, res, next) => {
   try {
-    const files = req?.files.map((e) => {
-      return {
-        imageLink: `http:localhost:3000/${e.filename}`,
-        imageName: e.filename,
+    const files = req?.files.map(async(e) => {
+      console.log
+      var img = fs.readFileSync(e.path);
+      var encode_img = img.toString('base64');
+      var final_img = {
+          itemId : req.body.itemId,
+          createdBy: req.body.createdBy,
+          contentType:  e.mimetype,
+          image:  new Buffer(encode_img,'base64'),
+          imageName: e.filename,
       };
+      const itemThumbnailResult = await addThumbnailByItem(final_img);
     });
 
     res.status(201).json({
@@ -123,16 +130,15 @@ export const addMultiImage = async (req, res, next) => {
 
 export const addSingleImage = async (req, res, next) => {
   try {
-    console.log(req)
+    console.log(req.body.itemId)
     if (req?.file) {
       var img = fs.readFileSync(req.file.path);
       var encode_img = img.toString('base64');
       var final_img = {
-          itemId : '639ff974c245926c3c56826e',
-          createdBy: '63a29ecbb6ccb68a528ff49a',
-          contentType:req.file.mimetype,
-          image:new Buffer(encode_img,'base64'),
-          imageLink: `http:localhost:3000/${req?.file?.filename}`,
+          itemId : req?.body?.itemId,
+          createdBy: req?.body?.createdBy,
+          contentType:  req.file.mimetype,
+          image:  new Buffer(encode_img,'base64'),
           imageName: req?.file?.filename,
       };
       const itemThumbnailResult = await addThumbnailByItem(final_img);
