@@ -21,23 +21,10 @@ import fs from "fs";
 import path from "path";
 export const addProductByCustomer = async (req, res, next) => {
   try {
+    console.log('Test',req.body)
     const item = await addItemByUser(req.body);
     await addProductByUser({ itemId: item?.id, ...req.body });
-    // await addThumbnailByItem({ itemId: item?.id, ...req.body });/
-    // console.log(typeof req.body?.thumbnails)
-    // const itemThumbnail = req.body?.thumbnails.map((e) => {
-    //   return {
-    //     ...e,
-    //     itemId: item?.id,
-    //     createdBy: req.body.createdBy,
-    //   };
-    // });
-    
-    // console.log(itemThumbnail)
-    // const addedThumbnail = await addBulkThumbnailsByItemId(itemThumbnail);
-    // addedThumbnail.map(async (e) => await updateThumbnail(e.itemId, e._id));
-
-    res.status(201).json({ message: "Product is added successfully" });
+    res.status(201).json({ itemId: item?.id, message: "Product is added successfully" });
   } catch (error) {
     next(BadRequest("Failed to add product", error));
   }
