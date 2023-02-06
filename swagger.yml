@@ -1,0 +1,495 @@
+openapi: 3.0.0
+info:
+  title: Swagger amazon clone - OpenAPI 3.0
+  description: |-
+    termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://amazonclone3.swagger.io/api/v3
+tags:
+  - name: auth
+    description: Auth
+  - name: category
+    description: Category
+  - name: product
+    description: product of customer
+paths:
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Register a new customer
+      operationId: register
+      requestBody:
+        description: Create a new customer in the db
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Register"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Register"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login a  customer
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Login"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Login"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /auth/logout:
+    get:
+      tags:
+        - auth
+      summary: Logout the customer
+      operationId: logout
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /category/add:
+    post:
+      tags:
+        - category
+      summary: Add a new category
+      operationId: addCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddCategory"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddCategory"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddCategory"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /category:
+    get:
+      tags:
+        - category
+      summary: Returns added all categories
+      operationId: getCategories
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /category/{id}:
+    delete:
+      tags:
+        - category
+      summary: Deletes a category
+      operationId: deletePet
+      parameters:
+        - name: id
+          in: path
+          description: categoryId to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid category value
+  /product/add/multi/image:
+    post:
+      tags:
+        - product
+      summary: Add a multi image
+      operationId: addImages
+      consumes:
+        - multipart/form-data
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: Invalid category value
+  /product/add/single/image:
+    post:
+      tags:
+        - product
+      summary: Add a image
+      operationId: addImage
+      consumes:
+        - multipart/form-data
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: Invalid category value
+  /product/add:
+    post:
+      tags:
+        - product
+      summary: Add a new product
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddProduct"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddProduct"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddProduct"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: Invalid category value
+  /product/update:
+    post:
+      tags:
+        - product
+      summary: Update a product
+      operationId: updateProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProduct"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/UpdateProduct"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UpdateProduct"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid category value
+  /product/all:
+    get:
+      tags:
+        - product
+      summary: Returns all products based filter
+      operationId: getProducts
+      parameters:
+        - name: perPage
+          in: query
+          description: Per page data should be fetched
+          required: true
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page of data should be fetched
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /product/{id}:
+    get:
+      tags:
+        - product
+      summary: Returns  product details based on productID
+      operationId: getProductDetails
+      parameters:
+        - name: id
+          in: path
+          description: productId to fetch the details
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /product/add/review:
+    post:
+      tags:
+        - product
+      summary: Add review to the product
+      operationId: addReview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddReview"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/AddReview"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/AddReview"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+        "400":
+          description: Invalid input
+  /product/review/{productId}:
+    get:
+      tags:
+        - product
+      summary: Returns reviews based on productId
+      operationId: getReviewsByProduct
+      parameters:
+        - name: productId
+          in: path
+          description: productId to fetch the details
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+components:
+  schemas:
+    Register:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: aravind
+        lastName:
+          type: string
+          example: k
+        email:
+          type: string
+          example: aravind@gmail.com
+        password:
+          type: string
+          example: password@123
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: aravind@gmail.com
+        password:
+          type: string
+          example: password@123
+    AddCategory:
+      type: object
+      properties:
+        customerId:
+          type: string
+          example: 639ff85fc245926c3c5681
+        categoryName:
+          type: string
+          example: Men
+        categoryDescription:
+          type: string
+          example: Men product
+    AddReview:
+      type: object
+      properties:
+        productId:
+          type: string
+          example: 639ff85fc245926c3c5681
+        reviewTitle:
+          type: string
+          example: Good
+        reviewDescription:
+          type: string
+          example: product is very good quality
+        rating:
+          type: number
+          example: 3
+        createdBy:
+          type: string
+          example: 639dab51bafd61c9a5b0d865
+    AddProduct:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: Adidas
+        modelName:
+          type: string
+          example: model name
+        color:
+          type: string
+          example: black
+        formFactor:
+          type: string
+          example: xyx factor
+        specialFeature:
+          type: string
+          example: linen
+        connectivityTechnology:
+          type: string
+          example: new tech
+        itemDimensions:
+          type: string
+          example: 10.2px
+        itemWeight:
+          type: string
+          example: 10g
+        finalPrice:
+          type: number
+          example: 299
+        mrpPrice:
+          type: number
+          example: 399
+        discountPercentage:
+          type: number
+          example: 20
+        netQuantity:
+          type: number
+          example: 10
+        soldStock:
+          type: number
+          example: 2
+        createdBy:
+          type: string
+          example: 639ff85fc245926c3c568261
+        categoryId:
+          type: string
+          example: 63a1482c8007d0692d315dd2
+        productName:
+          type: string
+          example: jean
+        productDescription:
+          type: string
+          example: shaded
+        colors:
+          type: array
+          example: ["green", "black"]
+        rating:
+          type: number
+          example: 4
+        thumbnails:
+          type: array
+          example:
+            [{ "imageName": "pic1", "imageLink": "https:website.image1.png" }]
+    UpdateProduct:
+      type: object
+      properties:
+        itemId:
+          type: string
+          example: 639ff85fc245926c3c568261
+        productId:
+          type: string
+          example: 839ff85fc245926c3c568261
+        brand:
+          type: string
+          example: Adidas
+        modelName:
+          type: string
+          example: model name
+        color:
+          type: string
+          example: black
+        formFactor:
+          type: string
+          example: xyx factor
+        specialFeature:
+          type: string
+          example: linen
+        connectivityTechnology:
+          type: string
+          example: new tech
+        itemDimensions:
+          type: string
+          example: 10.2px
+        itemWeight:
+          type: string
+          example: 10g
+        finalPrice:
+          type: number
+          example: 299
+        mrpPrice:
+          type: number
+          example: 399
+        discountPercentage:
+          type: number
+          example: 20
+        netQuantity:
+          type: number
+          example: 10
+        soldStock:
+          type: number
+          example: 2
+        createdBy:
+          type: string
+          example: 639ff85fc245926c3c568261
+        categoryId:
+          type: string
+          example: 63a1482c8007d0692d315dd2
+        productName:
+          type: string
+          example: jean
+        productDescription:
+          type: string
+          example: shaded
+        colors:
+          type: array
+          example: ["green", "black"]
+        rating:
+          type: number
+          example: 4
